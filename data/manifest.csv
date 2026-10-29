@@ -1,0 +1,30 @@
+id,title,author,split
+105,Persuasion,Jane Austen,train 
+158,Emma,Jane Austen,train 
+1342,Pride and Prejudice,Jane Austen,train 
+98,A Tale of Two Cities,Charles Dickens,train
+730,Oliver Twist,Charles Dickens,train
+1400,Great Expectations,Charles Dickens,train
+1661,The Adventures of Sherlock Holmes,Arthur Conan Doyle,train
+2852,The Hound of the Baskervilles,Arthur Conan Doyle,train
+35,The Time Machine,H. G. Wells,train
+36,The War of the Worlds,H. G. Wells,train
+5230,The Invisible Man,H. G. Wells,train
+43,Strange Case of Dr Jekyll and Mr Hyde,Robert Louis Stevenson,train
+120,Treasure Island,Robert Louis Stevenson,train
+84,Frankenstein,Mary Shelley,train
+345,Dracula,Bram Stoker,train
+2701,Moby Dick,Herman Melville,train
+236,The Jungle Book,Rudyard Kipling,train
+11,Alice's Adventures in Wonderland,Lewis Carroll,train
+16,Peter Pan,J. M. Barrie,train
+56665,Tales and Stories,Mary Wollstonecraft Shelley,train
+68779,Personal reminiscences of Henry Irving,Bram Stoker,train
+79864,Ferdinand de Soto and the invasion of Florida,Frederick A. Ober,train
+79867,The double thirteen,Anthony Wynne,train
+174,The Picture of Dorian Gray,Oscar Wilde,val
+902,The Happy Prince and Other Tales,Oscar Wilde,val
+74,The Adventures of Tom Sawyer,Mark Twain,test
+76,Adventures of Huckleberry Finn,Mark Twain,test
+215,The Call of the Wild,Jack London,test
+910,White Fang,Jack London,test
