@@ -1,0 +1,3 @@
+tag,contexto,dropout,weight_decay,lr,mejor_top3_val,mejor_epoca,val_loss_minima
+c3_d50,3,0.5,0.01,0.001,0.2812,7,5.0732
+c5_d50,5,0.5,0.01,0.001,0.2783,8,5.1169

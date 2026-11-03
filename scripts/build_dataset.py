@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT))
 from src.data.dataset import read_split, build_vocab, encode, make_windows, UNK
 
 VOCAB_SIZE = 8000
-CONTEXT = 3
+CONTEXT = int(sys.argv[1]) if len(sys.argv) > 1 else 3
 PROC = ROOT / "data" / "processed"
 
 books = {s: read_split(PROC / s) for s in ("train", "val", "test")}
