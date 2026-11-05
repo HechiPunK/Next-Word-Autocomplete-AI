@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b09">
+  <title>Next Word AI</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>NEXT WORD <strong>AI</strong></span>
+      </div>
+      <span id="model-status" class="model-status">CONNECTING</span>
+    </header>
+
+    <section class="hero">
+      <p class="subtitle"><span class="eyebrow-label">LOCAL LANGUAGE ENGINE</span></p>
+      <p class="subtitle"> Write a phrase and let the model suggest the most likely continuation.</p>
+    </section>
+
+    <section class="composer" aria-label="Word prediction">
+      <label for="prompt">YOUR TEXT</label>
+      <textarea id="prompt" rows="4" maxlength="1200" placeholder="It was a dark and..." autofocus></textarea>
+      <div class="suggestions" id="suggestions" aria-live="polite"></div>
+      <div class="actions">
+        <span id="word-count">0 WORDS</span>
+        <div class="utility-actions">
+          <button id="copy-text" type="button" class="utility-button">COPY</button>
+          <button id="delete-text" type="button" class="utility-button">DELETE</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
