@@ -14,6 +14,7 @@ parser.add_argument("--wd", type=float, default=0.0)        # weight decay (pena
 parser.add_argument("--lr", type=float, default=1e-3)       # tamaño del paso de corrección
 parser.add_argument("--epochs", type=int, default=6)
 parser.add_argument("--tag", default="base")                # nombre del experimento
+parser.add_argument("--emb", type=int, default=64)   # tamaño del vector de cada palabra
 args = parser.parse_args()
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,7 +22,7 @@ PROC = ROOT / "data" / "processed"
 (ROOT / "models" / "checkpoints").mkdir(parents=True, exist_ok=True)
 (ROOT / "logs").mkdir(exist_ok=True)
 
-EMB_DIM, HIDDEN, BATCH, SEED = 64, 2048, 1024, 42
+EMB_DIM, HIDDEN, BATCH, SEED = args.emb, 2048, 1024, 42
 
 torch.manual_seed(SEED)
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -125,4 +126,5 @@ with open(exp_file, "a", newline="") as f:
     w.writerow([args.tag, CONTEXT, args.dropout, args.wd, args.lr,
                 round(best, 4), best_epoch, round(min_val_loss, 4)])
 
-print(f"\nMejor top-3 en val: {best:.1%} en la época {best_epoch}  (baseline de n-gramas: 27.6%)")
+baseline = json.loads((ROOT / "logs" / "baseline_val.json").read_text(encoding="utf-8"))["mejor"]["top3_val"]
+print(f"\nMejor top-3 en val: {best:.1%} en la época {best_epoch}  (baseline de n-gramas: {baseline:.1%})")

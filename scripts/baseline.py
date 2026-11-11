@@ -20,7 +20,7 @@ model = NgramBaseline(len(vocab)).fit(X_train, y_train)
 
 results = []
 for order in (1, 2, 3):
-    for min_count in ((1,) if order == 1 else (1, 2, 3, 5, 10)):
+    for min_count in ((1,) if order == 1 else (1, 2, 3, 5, 10, 20, 50, 100)):
         preds = model.predict_top3(X_val, order, min_count)
         acc, n, excl = top3_accuracy(preds, y_val)
         results.append({"orden": order, "min_count": min_count,

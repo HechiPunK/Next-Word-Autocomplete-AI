@@ -2,87 +2,129 @@
   "mejor": {
     "orden": 3,
     "min_count": 10,
-    "top3_val": 0.2756,
-    "evaluados": 89925,
-    "excluidos_unk": 6178
+    "top3_val": 0.2888,
+    "evaluados": 90202,
+    "excluidos_unk": 5901
   },
   "todas": [
     {
       "orden": 1,
       "min_count": 1,
-      "top3_val": 0.2469,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2489,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 2,
       "min_count": 1,
-      "top3_val": 0.2646,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2768,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 2,
       "min_count": 2,
-      "top3_val": 0.2683,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2797,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 2,
       "min_count": 3,
-      "top3_val": 0.2711,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2818,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 2,
       "min_count": 5,
-      "top3_val": 0.2737,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2845,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 2,
       "min_count": 10,
-      "top3_val": 0.2752,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2854,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
+    },
+    {
+      "orden": 2,
+      "min_count": 20,
+      "top3_val": 0.2848,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
+    },
+    {
+      "orden": 2,
+      "min_count": 50,
+      "top3_val": 0.2793,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
+    },
+    {
+      "orden": 2,
+      "min_count": 100,
+      "top3_val": 0.2746,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 3,
       "min_count": 1,
-      "top3_val": 0.2487,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2623,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 3,
       "min_count": 2,
-      "top3_val": 0.2594,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2724,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 3,
       "min_count": 3,
-      "top3_val": 0.2656,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2783,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 3,
       "min_count": 5,
-      "top3_val": 0.272,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.285,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     },
     {
       "orden": 3,
       "min_count": 10,
-      "top3_val": 0.2756,
-      "evaluados": 89925,
-      "excluidos_unk": 6178
+      "top3_val": 0.2888,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
+    },
+    {
+      "orden": 3,
+      "min_count": 20,
+      "top3_val": 0.2886,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
+    },
+    {
+      "orden": 3,
+      "min_count": 50,
+      "top3_val": 0.2822,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
+    },
+    {
+      "orden": 3,
+      "min_count": 100,
+      "top3_val": 0.2761,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
     }
   ]
 }

@@ -18,9 +18,30 @@ id,title,author,split
 236,The Jungle Book,Rudyard Kipling,train
 11,Alice's Adventures in Wonderland,Lewis Carroll,train
 16,Peter Pan,J. M. Barrie,train
+768,Wuthering Heights,Emily Brontë,train
+27,Far from the Madding Crowd,Thomas Hardy,train
+77,The House of the Seven Gables,Nathaniel Hawthorne,train
+110,Tess of the d'Urbervilles: A Pure Woman,Thomas Hardy,train
+122,The Return of the Native,Thomas Hardy,train
+143,The Mayor of Casterbridge,Thomas Hardy,train
+145,Middlemarch,George Eliot,train
+153,Jude the Obscure,Thomas Hardy,train
+219,Heart of Darkness,Joseph Conrad,train 
+224,A pair of blue eyes,Thomas Hardy,train
+289,The Wind in the Willows,Kenneth Grahame,train 
+507,Adam Bede,George Eliot,train
+512,Mosses from an old manse,Nathaniel Hawthorne,train
+550,Silas Marner,George Eliot,train
+1260,Jane Eyre: An Autobiography,Charlotte Brontë,train
+1952,The Yellow Wallpaper,Charlotte Perkins Gilman,train
+2166,King Solomon's Mines,H. Rider Haggard,train
+5658,Lord Jim,Joseph Conrad,train
+6688,The Mill on the Floss,George Eliot,train
+9182,Villette,Charlotte Brontë,train
+25344,The Scarlet Letter,Nathaniel Hawthorne,train
+37106,Little Women,Louisa May Alcott,train
 56665,Tales and Stories,Mary Wollstonecraft Shelley,train
 68779,Personal reminiscences of Henry Irving,Bram Stoker,train
-79864,Ferdinand de Soto and the invasion of Florida,Frederick A. Ober,train
 79867,The double thirteen,Anthony Wynne,train
 174,The Picture of Dorian Gray,Oscar Wilde,val
 902,The Happy Prince and Other Tales,Oscar Wilde,val
