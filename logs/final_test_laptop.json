@@ -1,0 +1,86 @@
+{
+  "fecha": "2026-11-11T19:27:53",
+  "dispositivo": "Windows-11-10.0.26320-SP0",
+  "modelo": "c3_d30_more",
+  "red": {
+    "top3": 0.2668,
+    "margen_95": 0.0017,
+    "evaluados": 266257,
+    "excluidos_unk": 23483,
+    "por_libro": {
+      "pg215.txt": {
+        "top3": 0.2808,
+        "evaluados": 28416,
+        "excluidos_unk": 3650
+      },
+      "pg74.txt": {
+        "top3": 0.2645,
+        "evaluados": 66279,
+        "excluidos_unk": 5420
+      },
+      "pg76.txt": {
+        "top3": 0.2541,
+        "evaluados": 104868,
+        "excluidos_unk": 8289
+      },
+      "pg910.txt": {
+        "top3": 0.2832,
+        "evaluados": 66694,
+        "excluidos_unk": 6124
+      }
+    }
+  },
+  "latencia_ms_por_sugerencia": 2.42,
+  "ejemplos": {
+    "i do not": [
+      "know",
+      "think",
+      "mean"
+    ],
+    "it was a dark and": [
+      "a",
+      "the",
+      "sinister"
+    ],
+    "she looked at him with": [
+      "a",
+      "the",
+      "an"
+    ]
+  },
+  "baseline": {
+    "top3": 0.2581,
+    "margen_95": 0.0017,
+    "evaluados": 266257,
+    "excluidos_unk": 23483,
+    "por_libro": {
+      "pg215.txt": {
+        "top3": 0.2728,
+        "evaluados": 28416,
+        "excluidos_unk": 3650
+      },
+      "pg74.txt": {
+        "top3": 0.2569,
+        "evaluados": 66279,
+        "excluidos_unk": 5420
+      },
+      "pg76.txt": {
+        "top3": 0.2449,
+        "evaluados": 104868,
+        "excluidos_unk": 8289
+      },
+      "pg910.txt": {
+        "top3": 0.2739,
+        "evaluados": 66694,
+        "excluidos_unk": 6124
+      }
+    },
+    "config": {
+      "orden": 3,
+      "min_count": 10,
+      "top3_val": 0.2888,
+      "evaluados": 90202,
+      "excluidos_unk": 5901
+    }
+  }
+}
