@@ -1,121 +1,58 @@
 <!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f5f4ef">
-    <meta name="description" content="Prueba en vivo un modelo pequeño que predice las siguientes palabras en inglés.">
-    <title>Next Word — autocompletado en vivo</title>
-    <link rel="stylesheet" href="/styles.css">
-    <script src="/app.js" defer></script>
-  </head>
-  <body>
-    <header class="topbar">
-      <a class="brand" href="/" aria-label="Next Word, inicio">
-        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span>next<span class="brand-light">word</span></span>
-      </a>
-      <div class="topbar-note"><span class="live-dot"></span> DEMO DEL MODELO</div>
-      <a class="source-link" href="https://github.com/HechiPunK/Next-Word-Autocomplete-AI" target="_blank" rel="noreferrer">
-        Proyecto <span aria-hidden="true">↗</span>
-      </a>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b09">
+  <meta name="description" content="Try a small neural network that suggests the next word of an English phrase.">
+  <title>Next Word AI</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>NEXT WORD <strong>AI</strong></span>
+      </div>
+      <span id="model-status" class="model-status" role="status">CONNECTING</span>
     </header>
 
-    <main>
-      <section class="intro">
-        <div class="eyebrow"><span class="eyebrow-line"></span> AUTOCOMPLETADO · INGLÉS</div>
-        <h1>Una frase empieza.<br><span>El modelo la continúa.</span></h1>
-        <p class="intro-copy">Escribe unas palabras y mira qué tres opciones propone una red neuronal entrenada desde cero con literatura en inglés.</p>
-      </section>
+    <section class="hero">
+      <p class="eyebrow-label">LOCAL LANGUAGE ENGINE</p>
+      <p class="subtitle">Write a phrase and let the model suggest the most likely continuation.</p>
+      <div class="try-row">
+        <span class="meta-label">TRY</span>
+        <button class="chip" type="button" data-example="i do not">i do not</button>
+        <button class="chip" type="button" data-example="it was a dark and">it was a dark and</button>
+        <button class="chip" type="button" data-example="she looked at him with">she looked at him with</button>
+      </div>
+    </section>
 
-      <section class="workspace" aria-label="Demo de autocompletado">
-        <div class="demo-card">
-          <div class="card-heading">
-            <div>
-              <span class="section-kicker">01 / PRUÉBALO</span>
-              <h2>¿Qué viene después?</h2>
-            </div>
-            <span class="model-badge"><span class="live-dot"></span> Modelo activo</span>
-          </div>
-
-          <form id="demo-form">
-            <label class="sr-only" for="prompt">Escribe una frase en inglés</label>
-            <div class="input-wrap">
-              <textarea id="prompt" name="prompt" rows="3" maxlength="500" spellcheck="false" placeholder="Escribe una frase en inglés…">i do not</textarea>
-              <span class="input-hint">EN</span>
-            </div>
-            <div class="input-footer">
-              <span>Las sugerencias se actualizan mientras escribes</span>
-              <span id="char-count">8 / 500</span>
-            </div>
-            <div class="try-row">
-              <span class="try-label">PRUEBA CON</span>
-              <button class="example-chip" type="button" data-example="i do not">i do not</button>
-              <button class="example-chip" type="button" data-example="it was a dark and">it was a dark and</button>
-              <button class="example-chip" type="button" data-example="she looked at him with">she looked at him with</button>
-            </div>
-          </form>
-
-          <div class="suggestion-area" aria-live="polite" aria-busy="false">
-            <div class="suggestion-heading">
-              <span class="section-kicker">02 / SIGUIENTES PALABRAS</span>
-              <span id="response-time" class="response-time">— ms</span>
-            </div>
-            <div id="suggestions" class="suggestions">
-              <div class="loading-state"><span class="loader"></span> Calculando sugerencias…</div>
-            </div>
-            <p class="suggestion-note"><span aria-hidden="true">↳</span> Elige una palabra para continuar la frase.</p>
-            <p id="error-message" class="error-message" role="alert" hidden></p>
-          </div>
+    <section class="composer" aria-label="Word prediction">
+      <label for="prompt">YOUR TEXT</label>
+      <textarea id="prompt" rows="4" maxlength="1200" spellcheck="false" placeholder="Type any English word or phrase..." autofocus></textarea>
+      <div class="suggestions" id="suggestions" aria-live="polite"></div>
+      <div class="context-row">
+        <span class="meta-label">CONTEXT</span>
+        <div id="context-window" class="context-window" aria-label="The last three words the model reads"></div>
+        <span id="response-time" class="meta-value" title="Time the model took to answer, measured on the machine running the server">— ms</span>
+      </div>
+      <div class="actions">
+        <span id="word-count">0 WORDS</span>
+        <div class="utility-actions">
+          <button id="copy-text" type="button" class="utility-button">COPY</button>
+          <button id="delete-text" type="button" class="utility-button">DELETE</button>
         </div>
+      </div>
+    </section>
 
-        <aside class="details-card">
-          <div class="context-panel">
-            <span class="section-kicker">EL CONTEXTO QUE VE</span>
-            <h2>Solo las últimas<br>tres palabras.</h2>
-            <p>La red no lee toda la frase: usa una ventana de tres palabras para calcular sus opciones.</p>
-            <div id="context-window" class="context-window" aria-label="Palabras usadas como contexto">
-              <span class="context-token is-empty">…</span>
-              <span class="context-token is-empty">…</span>
-              <span class="context-token is-empty">…</span>
-            </div>
-            <span class="context-caption">VENTANA DE CONTEXTO</span>
-          </div>
-          <div class="details-divider"></div>
-          <div class="model-facts">
-            <span class="section-kicker">EL MODELO</span>
-            <div class="fact-row"><span>Arquitectura</span><strong>MLP · NumPy</strong></div>
-            <div class="fact-row"><span>Vocabulario</span><strong>8.000 palabras</strong></div>
-            <div class="fact-row"><span>Entrenamiento</span><strong>Literatura del s. XIX</strong></div>
-          </div>
-          <div class="limit-note">
-            <span class="limit-icon" aria-hidden="true">i</span>
-            <p>No es un chatbot: predice continuaciones en inglés y puede fallar con expresiones modernas o palabras poco comunes.</p>
-          </div>
-        </aside>
-      </section>
-
-      <section class="results-strip" aria-label="Resultado de evaluación">
-        <div class="result-label">
-          <span class="section-kicker">EVALUADO CON LIBROS NO VISTOS</span>
-          <p>Una referencia del rendimiento, no una garantía para cada frase.</p>
-        </div>
-        <div class="result-stat">
-          <strong>26,68<span>%</span></strong>
-          <span>acierto top-3</span>
-        </div>
-        <div class="result-divider"></div>
-        <div class="result-stat result-stat-secondary">
-          <strong>266.257</strong>
-          <span>predicciones evaluadas</span>
-        </div>
-        <div class="result-footnote">Test separado por autor · Gutenberg · <a href="https://github.com/HechiPunK/Next-Word-Autocomplete-AI/blob/main/logs/final_test_laptop.json" target="_blank" rel="noreferrer">ver resultados ↗</a></div>
-      </section>
-
-      <footer class="footer">
-        <span>Un modelo pequeño, una predicción cada vez.</span>
-        <span>Entrenado desde cero · Solo NumPy para inferencia</span>
-      </footer>
-    </main>
-  </body>
+    <section class="about" aria-label="About the model">
+      <p><strong>A small neural network trained from scratch</strong> on 19th-century English literature. It reads only the last three words and chooses from an 8,000-word vocabulary. It autocompletes; it does not understand or answer questions.</p>
+      <p id="eval-note" class="eval-note"></p>
+    </section>
+  </main>
+</body>
 </html>
