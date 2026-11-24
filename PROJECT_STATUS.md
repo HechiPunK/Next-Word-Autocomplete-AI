@@ -136,6 +136,79 @@ p.predict_top3("i do not")   # -> ['know', 'think', 'mean']
 
 `Predictor.predict_top3(texto)` hace: normaliza el texto con `src.data.clean.normalize` → toma las **últimas 3 palabras** (si hay menos, rellena con `<unk>`) → red → devuelve las 3 con mayor puntaje, nunca `<unk>`. **Esta es la interfaz** que usa el servidor HTTP.
 
+### Demo web del autocompletador
+
+La demo web permite probar el modelo final en vivo desde el navegador. Es una
+interfaz de demostración para el autocompletador, no un chatbot. El recorrido de
+una predicción es:
+
+```
+Navegador (web/) → POST /api/predict → src/serve/web_app.py
+                 → Predictor.predict_top3() → pesos y vocabulario locales
+```
+
+- **Frontend:** `web/index.html`, `web/styles.css` y `web/app.js`; no requiere
+  framework ni dependencias JavaScript. La interfaz se adapta a pantallas
+  pequeñas, ofrece tres frases de ejemplo y actualiza las sugerencias mientras
+  se escribe. Al seleccionar una palabra sugerida, la agrega a la frase y pide
+  una nueva predicción.
+- **Servidor:** `src/serve/web_app.py`, implementado con la biblioteca estándar
+  de Python (`http.server`). Carga una vez al inicio el predictor NumPy y sirve
+  la página y el endpoint desde el mismo origen. No usa PyTorch para inferencia
+  ni llama a un servicio externo.
+- **Contexto visible:** junto con las tres sugerencias, muestra las últimas tres
+  palabras que recibe el modelo. Si una palabra no pertenece al vocabulario se
+  conserva para el contexto, pero se identifica como desconocida; no se sugiere
+  `<unk>`.
+- **Latencia:** la interfaz muestra el tiempo medido para la llamada a
+  `predict_top3` en el servidor, en milisegundos. La latencia que aparece en la
+  página no es una medición de Raspberry Pi mientras no se ejecute allí.
+- **Métrica informativa:** el porcentaje top-3 y el número de ejemplos visibles
+  en la página corresponden al resultado guardado en
+  `logs/final_test_laptop.json`. Son el resultado del conjunto de test, no una
+  probabilidad ni una garantía para la frase que se escribe en la demo.
+
+**Ejecutar en Windows desde la raíz del repositorio:**
+
+```powershell
+python -m src.serve.web_app
+```
+
+Abrir <http://127.0.0.1:8000>. Se puede elegir otro puerto, por ejemplo:
+`python -m src.serve.web_app --port 8080`. El proceso requiere NumPy y los dos
+archivos emparejados `models/mlp_weights_c3_d30_more.npz` y
+`models/vocab.json`. Para detenerlo, usar `Ctrl+C`.
+
+El endpoint acepta `POST /api/predict` con `Content-Type: application/json` y
+cuerpo `{"text":"i do not"}`. Una respuesta correcta contiene:
+
+```json
+{
+  "suggestions": ["know", "think", "mean"],
+  "context": [
+    {"word": "i", "known": true},
+    {"word": "do", "known": true},
+    {"word": "not", "known": true}
+  ],
+  "latency_ms": 2.4
+}
+```
+
+La latencia del ejemplo es ilustrativa; cada respuesta incluye la medición real
+de esa ejecución. El servidor rechaza texto vacío después de normalizarlo, JSON
+inválido, formatos distintos de JSON y cuerpos mayores de 16 KiB, devolviendo un
+error HTTP explícito. Sirve únicamente rutas estáticas permitidas y, por
+defecto, escucha en `127.0.0.1` (solo la máquina local). Para mostrar la demo de
+la Raspberry Pi en el navegador de Windows, se puede abrir un túnel SSH:
+
+```bash
+ssh -L 8000:127.0.0.1:8000 sebas@sebas-raspberry.local
+```
+
+Después, iniciar `python3 -m src.serve.web_app` desde la raíz del proyecto en la
+Pi y abrir <http://127.0.0.1:8000> en Windows. No exponer este servidor de
+demostración directamente a una red pública.
+
 ---
 
 ## 7. Resultados
