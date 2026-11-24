@@ -1,7 +1,7 @@
 # Nano-AI Project — Next-Word Autocomplete: estado del proyecto
 
-> Última actualización: 2026-11-17
-> Documento de contexto para todo el equipo **y para cualquier IA** que colabore en este repositorio. Léelo completo antes de cambiar código, datos o modelos.
+> Última actualización: 2026-11-23
+> Documento de contexto para todo el equipo que colabore en este repositorio. Léelo completo antes de cambiar código, datos o modelos.
 
 ---
 
@@ -9,7 +9,7 @@
 
 - **Qué es:** un modelo de lenguaje pequeño, **entrenado desde cero** (pesos aleatorios), que sugiere **las 3 palabras más probables** que siguen a un texto en **inglés**. Es un autocompletador, no un chatbot.
 - **Para qué:** proyecto universitario (track 6, *Next-Word Autocomplete*) que debe correr en una **Raspberry Pi** (unos 4 GB de RAM).
-- **Estado:** el **modelo está entrenado, evaluado y congelado**. Falta montarlo en la Raspberry, hacer la demo (servidor/cliente de sockets), documentar los casos donde falla y escribir el reporte de 2 páginas.
+- **Estado:** el **modelo está entrenado, evaluado en la laptop y congelado**. El despliegue en la Raspberry Pi y la demo web HTTP están completados. Quedan pendientes la evaluación formal en la Pi, las mediciones de latencia y memoria, los casos reales de falla, el reporte de 2 páginas y la documentación final.
 - **Modelo final:** `c3_d30_more` (contexto de 3 palabras, ~17.3 M de parámetros, 10,048 neuronas).
 - **Resultado en test** (libros que el modelo nunca vio): **26.7 % top-3**, contra 25.8 % de un baseline de conteo.
 
@@ -28,13 +28,13 @@
 | 8 | Experimentos y ajuste con PyTorch/GPU | ✅ |
 | 9 | Exportar pesos a NumPy y `predictor.py` | ✅ |
 | 12 (adelantado) | Examen final en test, corrido en la laptop | ✅ |
-| 10 | Montar el modelo en la Raspberry Pi | ⏳ |
-| 11 | Servidor y cliente de sockets (demo en vivo) | ⏳ |
-| 12 | Examen en la Pi + tabla de casos donde falla | ⏳ |
+| 10 | Montar el modelo en la Raspberry Pi | ✅ |
+| 11 | Demostración web HTTP en vivo | ✅ |
+| 12 | Examen formal en la Pi, medición de latencia y memoria, y tabla de casos donde falla | ⏳ |
 | 13 | Reporte de 2 páginas | ⏳ |
 | 14 | Pulido, README, entrega | ⏳ |
 
-Equivale aproximadamente al **día 9-10 del plan**, con el examen de test ya hecho en la laptop.
+Equivale aproximadamente al **día 11 del plan**, con el examen de test ya hecho en la laptop.
 
 ---
 
@@ -56,6 +56,8 @@ Equivale aproximadamente al **día 9-10 del plan**, con el examen de test ya hec
 
 - Solo texto escrito por el equipo o de dominio público (Project Gutenberg). Sin mensajes privados ni datos personales.
 - Todo lo que se reporte debe tener un archivo en `logs/` que lo respalde.
+
+La rúbrica del profesor no exige un protocolo específico. La demostración en vivo ya funciona por HTTP.
 
 > Pendiente confirmar con el instructor cómo cuenta las neuronas: aquí se cuentan **capa oculta + capa de salida** (2,048 + 8,000 = 10,048). Los embeddings son una tabla de búsqueda y no se cuentan.
 
@@ -132,7 +134,7 @@ p = Predictor("models/mlp_weights_c3_d30_more.npz", "models/vocab.json")
 p.predict_top3("i do not")   # -> ['know', 'think', 'mean']
 ```
 
-`Predictor.predict_top3(texto)` hace: normaliza el texto con `src.data.clean.normalize` → toma las **últimas 3 palabras** (si hay menos, rellena con `<unk>`) → red → devuelve las 3 con mayor puntaje, nunca `<unk>`. **Esta es la interfaz acordada** para el servidor de sockets.
+`Predictor.predict_top3(texto)` hace: normaliza el texto con `src.data.clean.normalize` → toma las **últimas 3 palabras** (si hay menos, rellena con `<unk>`) → red → devuelve las 3 con mayor puntaje, nunca `<unk>`. **Esta es la interfaz** que usa el servidor HTTP.
 
 ---
 
@@ -158,7 +160,7 @@ p.predict_top3("i do not")   # -> ['know', 'think', 'mean']
 | *The Adventures of Tom Sawyer* (Twain) | 26.5 % | 25.7 % |
 | *Adventures of Huckleberry Finn* (Twain) | 25.4 % | 24.5 % |
 
-- **Velocidad en la laptop (Windows):** 2.4 ms por sugerencia. **En la Raspberry: pendiente de medir** (`logs/final_test_pi.json`).
+- **Velocidad en la laptop (Windows):** 2.4 ms por sugerencia. **En la Raspberry:** siguen pendientes la evaluación formal (`logs/final_test_pi.json`) y las mediciones de latencia y memoria.
 
 ### Experimentos (top-3 en val; respaldados por `logs/experiments.csv` y `logs/train_log_*.csv`)
 
@@ -207,18 +209,32 @@ Requisitos: Python 3, NumPy; **PyTorch con CUDA solo para entrenar** (para una R
 
 ## 10. Cómo montarlo en la Raspberry Pi
 
-1. Instalar dependencias (la Pi solo necesita NumPy, **no PyTorch**):
+**Equipo:** Raspberry Pi 4 Model B con 4 GB de RAM. **Sistema:** Raspberry Pi OS de 64 bits (Debian 13 Trixie, arquitectura `aarch64`). **Versiones:** Python 3.13.5, NumPy 2.2.4 y Git 2.47.3.
+
+1. Se instalaron Git y NumPy mediante `apt` (la Pi solo necesita NumPy, **no PyTorch**):
    ```bash
    sudo apt update && sudo apt install -y python3-numpy git
    ```
-2. Clonar solo la última versión (el historial arrastra modelos viejos pesados):
-   ```bash
-   git clone --depth 1 <URL-DEL-REPO>
-   ```
-3. Verificar que existan `models/mlp_weights_c3_d30_more.npz` y `models/vocab.json`.
-4. Copiar a la Pi la carpeta `data/processed/test/` (menos de 2 MB; está ignorada por Git).
-5. Examen en la Pi: `python3 scripts/final_eval.py --nombre pi` → genera `logs/final_test_pi.json`. El porcentaje debe coincidir con el de la laptop; lo nuevo es la velocidad.
-6. Construir el servidor de sockets sobre `Predictor.predict_top3`.
+2. Se clonó el repositorio con *sparse checkout*, incluyendo `/src/**`, `/web/**`, `models/mlp_weights_c3_d30_more.npz` y `models/vocab.json`. El historial arrastra modelos viejos pesados. Se actualizó la copia de la Pi con `git pull --ff-only origin main` y quedó en el commit `ea2910b` (`interfaz`).
+3. Se verificó la presencia de los pesos `models/mlp_weights_c3_d30_more.npz` (aprox. 66 MB) y del vocabulario `models/vocab.json` (aprox. 84 KB).
+4. Se ejecutó correctamente `Predictor` en la Pi y se obtuvieron estas sugerencias:
+
+   | Texto | Sugerencias |
+   |---|---|
+   | `i do not` | `know`, `think`, `mean` |
+   | `it was a dark and` | `a`, `the`, `sinister` |
+   | `she looked at him with` | `a`, `the`, `an` |
+
+5. Se abrió y probó la **demostración web HTTP** desde Windows. `src/serve/web_app.py` implementa el servidor con `ThreadingHTTPServer` y escucha en `127.0.0.1:8000`. `web/app.js` usa `fetch()` para enviar JSON a `POST /api/predict`, que devuelve sugerencias, contexto y latencia. Para reproducir la demo:
+
+   - En Windows, abrir el túnel SSH:
+     ```bash
+     ssh -L 8000:127.0.0.1:8000 sebas@sebas-raspberry.local
+     ```
+   - En la sesión SSH, desde la raíz del repo en la Pi, ejecutar `python3 -m src.serve.web_app`.
+   - En el navegador de Windows, abrir `http://127.0.0.1:8000`.
+
+6. **Evaluación formal pendiente.** Falta copiar a la Pi `data/processed/test/` (menos de 2 MB, ignorada por Git) y los scripts de evaluación necesarios, incluido `scripts/final_eval.py`, porque el *sparse checkout* actual no los incluye. Después, ejecutar `python3 scripts/final_eval.py --nombre pi` para generar `logs/final_test_pi.json`, comparar el top-3 con el de la laptop y registrar la latencia. Queda pendiente medir también el uso de memoria.
 
 ---
 
@@ -228,7 +244,7 @@ Requisitos: Python 3, NumPy; **PyTorch con CUDA solo para entrenar** (para una R
 |---|---|---|
 | Datos | _por asignar_ | `data/README.md` con título, autor, ID y licencia (dominio público) de cada libro |
 | Modelo | _por asignar_ | Nada: modelo congelado |
-| Pi / Servidor | _por asignar_ | Montar en la Pi, medir velocidad real, servidor y cliente de sockets |
+| Pi / Servidor | _por asignar_ | Copiar el conjunto de test y los scripts de evaluación a la Pi, ejecutar `scripts/final_eval.py` y medir latencia y memoria |
 | Evaluación / Reporte | _por asignar_ | Tabla de casos donde falla (en vivo, guardada), reporte de 2 páginas, README final |
 
 ---
@@ -261,7 +277,8 @@ Requisitos: Python 3, NumPy; **PyTorch con CUDA solo para entrenar** (para una R
 │   ├── data/                # clean.py (limpieza/normalización), dataset.py (vocabulario y ventanas)
 │   ├── model/               # mlp.py (red a mano en NumPy), ngram_baseline.py
 │   ├── eval/                # metrics.py (top-3)
-│   └── serve/               # predictor.py (inferencia en NumPy), servidor de sockets (pendiente)
+│   └── serve/               # predictor.py (inferencia en NumPy), web_app.py (servidor HTTP)
+├── web/                     # frontend de la demostración web
 ├── scripts/                 # prepare_data, check_splits, build_dataset, baseline, train, check_export, final_eval
 ├── models/                  # mlp_weights_c3_d30_more.npz + vocab.json (modelo final)
 ├── logs/                    # evidencia: experimentos, baseline, resultados finales
