@@ -1,17 +1,29 @@
+
+
+
+
+
+
+
+
 Inventario y procedencia del dataset
-Este directorio contiene el manifiesto del corpus utilizado por el proyecto Next-Word Autocomplete. La lista de referencia es `manifest.csv`, con una fila por libro y los campos `id`, `title`, `author` y `split`.
+Este directorio contiene el manifiesto del corpus utilizado por el proyecto Next-Word Autocomplete. La lista de referencia es `manifest.csv`, con una fila por libro y los campos id, title, author y split.
+
 Procedencia
 Los 50 títulos registrados en el manifiesto están vinculados a sus fichas de Project Gutenberg mediante el identificador de eBook. Los enlaces de esta lista permiten consultar la ficha y las descargas disponibles para cada obra.
+
 Nota importante sobre derechos: Project Gutenberg indica que sus determinaciones de dominio público se realizan conforme a la legislación de Estados Unidos y recomienda a las personas fuera de ese país comprobar la legislación local. Por tanto, este inventario identifica la fuente de consulta y no constituye una certificación jurídica individual de dominio público en todos los países. Antes de redistribuir los textos o publicar copias, revisa la ficha, el encabezado/licencia del eBook y las normas aplicables en tu jurisdicción. Consulta Terms of Use y Permissions, Licensing and other Common Requests.
+
 Resumen de particiones
 Partición	Libros	Autores	Uso
-`train`	44	23 autores	Entrenamiento del vocabulario y del modelo
-`val`	2	Oscar Wilde	Selección de configuración y seguimiento durante entrenamiento
-`test`	4	Mark Twain y Jack London	Evaluación final con autores no vistos
+train	44	23 autores	Entrenamiento del vocabulario y del modelo
+val	2	Oscar Wilde	Selección de configuración y seguimiento durante entrenamiento
+test	4	Mark Twain y Jack London	Evaluación final con autores no vistos
 Total	50	26 autores	
-Los autores están separados entre particiones según `manifest.csv`: no hay un mismo autor asignado a más de un split. El proyecto documenta una comprobación adicional de IDs duplicados y solapamiento de 8-gramas mediante `scripts/check_splits.py`.
+Los autores están separados entre particiones según manifest.csv: no hay un mismo autor asignado a más de un split. El proyecto documenta una comprobación adicional de IDs duplicados y solapamiento de 8-gramas mediante scripts/check_splits.py.
+
 Inventario completo
-Entrenamiento (`train`) — 44 libros
+Entrenamiento (train) — 44 libros
 ID	Obra	Autor	Fuente
 105	Persuasion	Jane Austen	Project Gutenberg eBook 105
 158	Emma	Jane Austen	Project Gutenberg eBook 158
@@ -57,34 +69,42 @@ ID	Obra	Autor	Fuente
 56665	Tales and Stories	Mary Wollstonecraft Shelley	Project Gutenberg eBook 56665
 68779	Personal reminiscences of Henry Irving	Bram Stoker	Project Gutenberg eBook 68779
 79867	The double thirteen	Anthony Wynne	Project Gutenberg eBook 79867
-Validación (`val`) — 2 libros
+Validación (val) — 2 libros
 ID	Obra	Autor	Fuente
 174	The Picture of Dorian Gray	Oscar Wilde	Project Gutenberg eBook 174
 902	The Happy Prince and Other Tales	Oscar Wilde	Project Gutenberg eBook 902
-Prueba (`test`) — 4 libros
+Prueba (test) — 4 libros
 ID	Obra	Autor	Fuente
 74	The Adventures of Tom Sawyer	Mark Twain	Project Gutenberg eBook 74
 76	Adventures of Huckleberry Finn	Mark Twain	Project Gutenberg eBook 76
 215	The Call of the Wild	Jack London	Project Gutenberg eBook 215
 910	White Fang	Jack London	Project Gutenberg eBook 910
 Preprocesamiento utilizado
-El código de `src/data/clean.py` realiza las siguientes transformaciones antes de formar las ventanas de entrenamiento:
+El código de src/data/clean.py realiza las siguientes transformaciones antes de formar las ventanas de entrenamiento:
+
 Retira el bloque de inicio y final de Project Gutenberg cuando coincide con los marcadores esperados.
-Elimina encabezados que comienzan con `Chapter`, `Book`, `Part`, `Volume` o `Contents`.
+Elimina encabezados que comienzan con Chapter, Book, Part, Volume o Contents.
 Convierte el texto a minúsculas.
-Conserva letras inglesas (`a-z`), apóstrofes y espacios; normaliza espacios repetidos.
-Construye el vocabulario usando únicamente los textos de `train`: 7,999 palabras frecuentes más `<unk>`.
+Conserva letras inglesas (a-z), apóstrofes y espacios; normaliza espacios repetidos.
+Construye el vocabulario usando únicamente los textos de train: 7,999 palabras frecuentes más <unk>.
 Forma ejemplos con tres palabras de contexto y la palabra siguiente como objetivo.
-Los textos limpios y los arreglos derivados se guardan en `data/processed/` y se generan mediante los scripts del repositorio; no deben editarse manualmente después de congelar la evaluación final.
+Los textos limpios y los arreglos derivados se guardan en data/processed/ y se generan mediante los scripts del repositorio; no deben editarse manualmente después de congelar la evaluación final.
+
 Conteos del corpus documentados por el proyecto
 Split	Palabras del texto limpio	Ejemplos contexto→siguiente
 train	5,234,106	5,233,974
 val	96,109	96,103
 test	289,752	289,740
-Los objetivos `<unk>` reportados para train/val/test son aproximadamente 5.7 %, 6.1 % y 8.1 %, respectivamente. La métrica Top-3 final excluye objetivos `<unk>` y debe acompañarse siempre del número excluido.
+Los objetivos <unk> reportados para train/val/test son aproximadamente 5.7 %, 6.1 % y 8.1 %, respectivamente. La métrica Top-3 final excluye objetivos <unk> y debe acompañarse siempre del número excluido.
+
 Fuentes y referencias
 Project Gutenberg — Terms of Use
 Project Gutenberg — Permissions, Licensing and other Common Requests
 Project Gutenberg — License
 Manifiesto del proyecto
 Fecha de consulta/documentación: 24 de noviembre de 2026.
+
+
+
+
+
